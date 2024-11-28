@@ -1,6 +1,7 @@
 package com.example.ejemplo_intent_implicito
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -37,13 +38,61 @@ class MainActivity : AppCompatActivity() {
             // COMO VERIFICAR SI TU APP TIENE PERMISOS
             // https://developer.android.com/training/permissions/requesting?hl=es-419
             //Ejercicio.- Averigue como mostrar selector de permisos
-            startActivity(intent_llamar)
 
+            //Los permisos se definen como constantes en codigo
+            // desde la clase Manifest.permission.<PERMISO QUE SEA>
+
+
+            //Función ContextCompat.checkSelfPermission , averiguar permiso
+            if(ContextCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED)
+            {
+                //Muestro dialogo para solicitar el permiso al ususario
+                requestPermissions(arrayOf(Manifest.permission.CALL_PHONE),1)
+
+            }
+            else{
+                startActivity(intent_llamar)
+            }
+
+
+
+            //Funcion requestPermissions, muestra dialogo que pregunta al
+                // usuario si quiere conceder ese permiso
+
+            //Implementación funcion onRequestPermissionsResult,
+               //En la que se ejecuta el codigo cuando el usuario responda
+
+
+/*
+                val mirotador=ObjectAnimator.ofFloat(imagen,"rotacion",0f,560f)
+                mirotador.duration=1000
+                mirotador.start()
+*/
 
 
             }
 
         }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode==1)
+        {//Comprobamos si venimos de la petición de solicitud de permisos
+            //1
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
+            {
+                //Que hacemos?
+                startActivity(intent_llamar)
+            }
+
+        }
+
+    }
+
     }
 
 
