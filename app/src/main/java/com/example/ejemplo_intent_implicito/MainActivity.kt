@@ -2,12 +2,14 @@ package com.example.ejemplo_intent_implicito
 
 import android.Manifest
 import android.animation.ObjectAnimator
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -46,8 +48,28 @@ class MainActivity : AppCompatActivity() {
             //Función ContextCompat.checkSelfPermission , averiguar permiso
             if(ContextCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED)
             {
-                //Muestro dialogo para solicitar el permiso al ususario
-                requestPermissions(arrayOf(Manifest.permission.CALL_PHONE),1)
+                //En la rama de git deberia_solicitar_permiso antes de mostrar el dialogo para solicitar
+                //al usuario, compruebo si es un permiso en el que
+                //debo preguntarle al usuario para explicarle porque
+                //hay que conceder el permiso
+                if(shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE))
+                    {
+                    //Muestro un AlertDialog
+                    var alertDialog=AlertDialog.Builder(this)
+                        alertDialog.apply {
+                            setTitle("PERMISO DE LLAMADA NECESARIO")
+                            setMessage("Si no concedes el permiso la app no funciona")
+                            setPositiveButton(android.R.string.ok,DialogInterface.OnClickListener { dialog, which ->
+                                //Si el usuario pulsa el boton ok, entonces solicito el permiso
+                                //Muestro dialogo para solicitar el permiso al ususario
+                                requestPermissions(arrayOf(Manifest.permission.CALL_PHONE),1)
+                            })
+                        }
+                        //Muestro el alertDialog
+                        alertDialog.create().show()
+
+                    }
+
 
             }
             else{
