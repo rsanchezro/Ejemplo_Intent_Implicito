@@ -54,6 +54,8 @@ class MainActivity : AppCompatActivity() {
                 //hay que conceder el permiso
                 if(shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE))
                     {
+
+                    //Suele devolver true si anteriormente hemos denegado el permiso
                     //Muestro un AlertDialog
                     var alertDialog=AlertDialog.Builder(this)
                         alertDialog.apply {
@@ -69,6 +71,10 @@ class MainActivity : AppCompatActivity() {
                         alertDialog.create().show()
 
                     }
+                else
+                {
+                    requestPermissions(arrayOf(Manifest.permission.CALL_PHONE),1)
+                }
 
 
             }
