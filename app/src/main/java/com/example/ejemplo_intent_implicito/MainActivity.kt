@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -48,14 +49,16 @@ class MainActivity : AppCompatActivity() {
             //Función ContextCompat.checkSelfPermission , averiguar permiso
             if(ContextCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED)
             {
+                Log.i("INFO","No tengo el permiso concedido")
                 //En la rama de git deberia_solicitar_permiso antes de mostrar el dialogo para solicitar
                 //al usuario, compruebo si es un permiso en el que
                 //debo preguntarle al usuario para explicarle porque
                 //hay que conceder el permiso
                 if(shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE))
                     {
-
-                    //Suele devolver true si anteriormente hemos denegado el permiso
+                    Log.i("INFO","Dentro de shouldShow")
+                    //Suele devolver true si anteriormente hemos denegado el permiso, pero si ya hay 2 veces
+                        //que hemos denegado el permiso devuelve false
                     //Muestro un AlertDialog
                     var alertDialog=AlertDialog.Builder(this)
                         alertDialog.apply {
@@ -73,6 +76,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 else
                 {
+                    Log.i("INFO","No tengo el permiso, pero requiero el permiso")
                     requestPermissions(arrayOf(Manifest.permission.CALL_PHONE),1)
                 }
 
@@ -101,7 +105,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-
+//Se invoca una vez
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -111,6 +115,7 @@ class MainActivity : AppCompatActivity() {
         if(requestCode==1)
         {//Comprobamos si venimos de la petición de solicitud de permisos
             //1
+            Log.i("INFO","Dentro de onRequesPermission")
             if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
             {
                 //Que hacemos?
